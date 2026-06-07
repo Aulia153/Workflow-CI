@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import tensorflow as tf
 import mlflow
 import mlflow.tensorflow
@@ -9,6 +10,7 @@ DATASET_PATH = os.path.join(
     BASE_DIR,
     "mango_preprocessing"
 )
+
 train_ds = tf.keras.utils.image_dataset_from_directory(
     DATASET_PATH,
     validation_split=0.2,
@@ -29,46 +31,52 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 
 os.makedirs("outputs", exist_ok=True)
 
+mlflow.set_tracking_uri("file:./mlruns")
 mlflow.tensorflow.autolog()
 
 model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(224,224,3)),
     tf.keras.layers.Rescaling(1./255),
 
-    tf.keras.layers.Conv2D(32,3,activation='relu'),
+    tf.keras.layers.Conv2D(32,3,activation="relu"),
     tf.keras.layers.MaxPooling2D(),
 
-    tf.keras.layers.Conv2D(64,3,activation='relu'),
+    tf.keras.layers.Conv2D(64,3,activation="relu"),
     tf.keras.layers.MaxPooling2D(),
 
-    tf.keras.layers.Conv2D(128,3,activation='relu'),
+    tf.keras.layers.Conv2D(128,3,activation="relu"),
     tf.keras.layers.MaxPooling2D(),
 
     tf.keras.layers.GlobalAveragePooling2D(),
 
-    tf.keras.layers.Dense(128,activation='relu'),
+    tf.keras.layers.Dense(128,activation="relu"),
 
-    tf.keras.layers.Dense(3,activation='softmax')
+    tf.keras.layers.Dense(3,activation="softmax")
 ])
 
 model.compile(
-    optimizer='adam',
-    loss='sparse_categorical_crossentropy',
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 with mlflow.start_run():
 
-    model.fit(
+    history = model.fit(
         train_ds,
         validation_data=val_ds,
         epochs=10
     )
 
-    model.save("outputs/mango_model.keras")
+    history_df = pd.DataFrame(history.history)
 
-    mlflow.tensorflow.log_model(
-        model, artifact_path="model"
+    history_df.to_csv(
+        "outputs/training_history.csv",
+        index=False
     )
 
-    print("Training selesai")
+    model.save(
+        "outputs/mango_model.keras"
+    )
+
+print("Training selesai")
