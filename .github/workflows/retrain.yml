@@ -15,16 +15,16 @@ jobs:
         python-version: "3.10"
 
     - name: Install Dependencies
-    run: |
-      pip install -r MLProject/requirements.txt
+      run: |
+        pip install -r MLProject/requirements.txt
     
     - name: Run MLflow Project
-    run: |
-      cd MLProject
-      mlflow run .
+      run: |
+        cd MLProject
+        mlflow run .
 
     - name: Upload Artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: mango-model
-      path: MLProject/mango_model.keras
+      uses: actions/upload-artifact@v4
+      with:
+        name: mango-model
+        path: MLProject/mango_model.keras
