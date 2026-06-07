@@ -3,7 +3,7 @@ import tensorflow as tf
 import mlflow
 import mlflow.tensorflow
 
-DATASET_PATH = "mango_preprocessing"
+DATASET_PATH = "MLProject/mango_preprocessing"
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
     DATASET_PATH,
