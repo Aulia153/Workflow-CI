@@ -32,7 +32,7 @@ os.makedirs("outputs", exist_ok=True)
 mlflow.tensorflow.autolog()
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(224,2244,3)),
+    tf.keras.layers.Input(shape=(224,224,3)),
     tf.keras.layers.Rescaling(1./255),
 
     tf.keras.layers.Conv2D(32,3,activation='relu'),
@@ -44,7 +44,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(128,3,activation='relu'),
     tf.keras.layers.MaxPooling2D(),
 
-    tf.keras.layers.Flatten(),
+    tf.keras.layers.GlobalAveragePooling2D(),
 
     tf.keras.layers.Dense(128,activation='relu'),
 
