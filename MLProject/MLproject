@@ -1,4 +1,4 @@
-name: mango-classification
+name: mango-training
 
 conda_env : conda.yml
 
