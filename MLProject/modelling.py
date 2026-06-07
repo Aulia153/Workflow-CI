@@ -31,7 +31,6 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 
 os.makedirs("outputs", exist_ok=True)
 
-mlflow.set_tracking_uri("file:./mlruns")
 mlflow.tensorflow.autolog()
 
 model = tf.keras.Sequential([
