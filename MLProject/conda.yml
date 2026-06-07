@@ -1,0 +1,16 @@
+name: mango-env
+
+channels:
+- conda-forge
+
+dependencies: 
+- python=3.10
+- pip
+- pip:
+  - tensorflow
+  - mlflow
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - seaborn
