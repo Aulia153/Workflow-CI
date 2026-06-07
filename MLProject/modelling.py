@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 import mlflow
 import mlflow.tensorflow
@@ -21,6 +22,8 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
     image_size=(224,224),
     batch_size=32
 )
+
+os.makedirs("outputs", exist_ok=True)
 
 mlflow.tensorflow.autolog()
 
@@ -58,4 +61,10 @@ with mlflow.start_run():
         epochs=10
     )
 
-    model.save("mango_model.keras")
+    model.save("outputs/mango_model.keras")
+
+    mlflow.tensorflow.log_model(
+        model, artifact_path="model"
+    )
+
+    print("Training selesai")
